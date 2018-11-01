@@ -8,3 +8,5 @@ ex1/.idea/workspace.xml
 ex1/cmake-build-debug/CMakeFiles/Progress/1
 *.txt
 *.o
+ex1/.idea/workspace.xml
+*.xml
