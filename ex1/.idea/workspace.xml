@@ -12,10 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e3307bd-9745-415f-b92a-419a01b5b58e" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/a.out" afterPath="$PROJECT_DIR$/a.out" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/ex1" afterPath="$PROJECT_DIR$/cmake-build-debug/ex1" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ex1.dir/C.includecache" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/ex1.dir/C.includecache" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.c" afterPath="$PROJECT_DIR$/main.c" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -31,10 +28,10 @@
       <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-500">
-              <caret line="20" column="63" lean-forward="false" selection-start-line="20" selection-start-column="63" selection-end-line="20" selection-end-column="63" />
+            <state relative-caret-position="554">
+              <caret line="99" column="1" lean-forward="false" selection-start-line="99" selection-start-column="1" selection-end-line="99" selection-end-column="1" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#193#211#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -134,7 +131,7 @@
       <workItem from="1540657813035" duration="3527000" />
       <workItem from="1540726554833" duration="157000" />
       <workItem from="1541075690732" duration="14000" />
-      <workItem from="1541075732002" duration="6604000" />
+      <workItem from="1541075732002" duration="7645000" />
     </task>
     <task id="LOCAL-00001" summary="concepts down.&#10;next step is to get it to compile">
       <created>1541085184126</created>
@@ -143,11 +140,18 @@
       <option name="project" value="LOCAL" />
       <updated>1541085184126</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="done - code is finished and qa is done">
+      <created>1541086788989</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1541086788989</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10302000" />
+    <option name="totallyTimeSpent" value="11343000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -191,7 +195,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="concepts down.&#10;next step is to get it to compile" />
-    <option name="LAST_COMMIT_MESSAGE" value="concepts down.&#10;next step is to get it to compile" />
+    <MESSAGE value="done - code is finished and qa is done" />
+    <option name="LAST_COMMIT_MESSAGE" value="done - code is finished and qa is done" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -203,7 +208,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#193#211#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -213,7 +218,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#193#211#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -223,7 +228,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#193#211#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -244,10 +249,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-500">
-          <caret line="20" column="63" lean-forward="false" selection-start-line="20" selection-start-column="63" selection-end-line="20" selection-end-column="63" />
+        <state relative-caret-position="554">
+          <caret line="99" column="1" lean-forward="false" selection-start-line="99" selection-start-column="1" selection-end-line="99" selection-end-column="1" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#193#211#0" expanded="true" />
           </folding>
         </state>
       </provider>
