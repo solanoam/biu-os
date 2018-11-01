@@ -10,3 +10,7 @@ ex1/cmake-build-debug/CMakeFiles/Progress/1
 *.o
 ex1/.idea/workspace.xml
 *.xml
+*.out
+*.xml
+*.includecache
+**/cmake-build-debug/
