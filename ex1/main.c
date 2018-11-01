@@ -69,7 +69,6 @@ int main(int argc, char **argv) {
     }
     //checking that file 2 isn't longer
     readStatus2 = (int) read(fdin2,&buf2,1);
-
     if (readStatus2 != 0){
         //file 2 is longer then file 1
         printf("1\n");
