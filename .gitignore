@@ -1,2 +1,10 @@
 
 .DS_Store
+*.includecache
+*.xml
+*.xml
+*.xml
+ex1/.idea/workspace.xml
+ex1/cmake-build-debug/CMakeFiles/Progress/1
+*.txt
+*.o
