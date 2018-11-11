@@ -4,13 +4,10 @@
  * Course: 83-381-01 (Operating Systems)
  * Practice: 83-381-02 (Yoram)
  **************************************/
-
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #define MAX_ARG 3
-
-
 //closing all open fd
 void closeAll(int fd1, int fd2){
     close(fd1);
