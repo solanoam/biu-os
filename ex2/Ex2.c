@@ -14,6 +14,7 @@ int CompileFile(char* in,int nameLength){
     printf("%s",in);
     printf("\n");
     printf("%s",out);
+    printf("\n");
     execlp("gcc","gcc","%s","-o","%s",in,out);
 }
 
