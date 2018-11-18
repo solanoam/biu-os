@@ -1,3 +1,9 @@
+/**************************************
+ * Author: Noam Solan
+ * ID: 204484703
+ * Course: 83-381-01 (Operating Systems)
+ * Practice: 83-381-02 (Yoram)
+ **************************************/
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -66,7 +72,7 @@ int CompileFile(char* in,int nameLength){
     strcpy(out, in); //out file name
     strcpy(in+nameLength,".c\0"); //adding extensions
     strcpy(out+nameLength,".out\0");
-    int fd = open("gccLog.txt", O_CREAT | O_WRONLY , S_IWOTH | S_IROTH | S_IRGRP | S_IWGRP | S_IRUSR | S_IWUSR);
+    int fd = open("gccLog.txt", O_CREAT | O_WRONLY | O_APPEND , S_IWOTH | S_IROTH | S_IRGRP | S_IWGRP | S_IRUSR | S_IWUSR);
     if (fd == -1){printf("error creating logs for gcc"); exit(-1);}
     pid_t childId = fork(); //forking before exec
     if (childId == 0){//child
