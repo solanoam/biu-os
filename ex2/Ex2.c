@@ -10,7 +10,7 @@
 void PrintGrade(char* cFile, int nameLength, int grade){
     cFile[nameLength] = '\0';
     printf("%s: ",cFile);
-    if (grade == -1){printf(" Compilation error\n");} //grade isn't a number
+    if (grade == -1){printf("Compilation error\n");} //grade isn't a number
     else {printf("%d\n", grade);} //print grade
 }
 //compering files return grade
@@ -51,7 +51,7 @@ void GetOutput(char *file, char* input){
 
 //getting grades
 int GetGrade(char* file, int compilationStatus, char* input, char* correctOut){
-    int grade = -1; //init for failled compilation
+    int grade = -1; //init for failed compilation
     if (compilationStatus == 0){return grade;} //checking status
     else{
         GetOutput(file, input); //getting stdout of .out
@@ -84,7 +84,7 @@ int CompileFile(char* in,int nameLength){
     }
 }
 int main(int argc, char** argv) {
-    int fdin1, fdin2, fdin3;
+    int fdUsers;
     char cFile[MAX_NAME];
     char printedName[MAX_NAME];
     char buffer;
@@ -93,9 +93,9 @@ int main(int argc, char** argv) {
         printf("Argument count is not correct. terminating...");
         return 0;
     }
-    fdin1 = open(argv[1],O_RDWR); //opening user list
-    if (fdin1 == -1){return 0;} //handler for open failure
-    while ((read(fdin1,&buffer, sizeof(buffer))) != 0){ //looping for all users
+    fdUsers = open(argv[1],O_RDWR); //opening user list
+    if (fdUsers == -1){return 0;} //handler for open failure
+    while ((read(fdUsers,&buffer, sizeof(buffer))) != 0){ //looping for all users
         if ((int) buffer == 10){ //space is found
             PrintGrade(cFile,nameLength, (GetGrade(cFile, CompileFile(cFile,nameLength), argv[2], argv[3])));
             nameLength = -1; //init length
