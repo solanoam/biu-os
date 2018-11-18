@@ -18,7 +18,7 @@ int CompFiles(char* const correctOut){
     }
     else {close(fd);}
     ChildId = fork();
-    if (ChildId == 0){execl("comp.out", "tempOut.txt", correctOut, NULL);}
+    if (ChildId == 0){execl("comp.out", "comp.out", "tempOut.txt", correctOut, NULL);}
     else {wait(&status);}
     if (WEXITSTATUS(status) == 2){return 100;}
     else {return 0;}
@@ -28,7 +28,7 @@ void GetOutput(char *file, char* input){
     int status;
     int fdin = open(input, O_RDONLY);
     if (fdin == -1) {printf("error with open arg[2]"); exit(-1);}
-    int fdout = open("tempOut.txt", O_CREAT | O_WRONLY | O_TRUNC);
+    int fdout = open("tempOut.txt", O_CREAT | O_WRONLY | O_TRUNC, S_IWOTH | S_IROTH | S_IRGRP | S_IWGRP | S_IRUSR | S_IWUSR);
     if (fdout == -1){printf("error with tempOut.txt");exit(-1);}
     pid_t ChildId = fork();
     if (ChildId == 0){
@@ -44,35 +44,32 @@ void GetOutput(char *file, char* input){
 void WriteToFile(int fdin, int grade){
     char enterChar[1];
     enterChar[0] = (char) 10;
-//    switch(grade){
-//        case -1:
-//            write(fdin,": Compilation error",19);
-//            write(fdin,enterChar,1);
-//            break;
-//        case 0:
-//            write(fdin,": 0",3);
-//            write(fdin,enterChar,1);
-//            break;
-//        case 100:
-//            write(fdin,": 100",5);
-//            write(fdin,enterChar,1);
-//            break;
-//        default:
-//            return;
-//    }
+    printf("%d\n",grade);
+    switch(grade){
+        case -1:
+            write(fdin,": Compilation error",19);
+            write(fdin,enterChar,1);
+            break;
+        case 0:
+            write(fdin,": 0",3);
+            //write(fdin,enterChar,1);
+            break;
+        case 100:
+            write(fdin,": 100",5);
+            //write(fdin,enterChar,1);
+            break;
+        default:
+            return;
+    }
 }
 
 int writeGrades(int fdin, char* file, int compilationStatus, char* input, char* correctOut){
     int grade = -1;
-    if (compilationStatus == 0){
-        WriteToFile(fdin, grade);
-        return 0;
-    }
+    if (compilationStatus == 0){return grade;}
     else{
         GetOutput(file, input);
         grade = CompFiles(correctOut);
-        WriteToFile(fdin, grade);
-        return 1;
+        return grade;
     }
 }
 
@@ -82,10 +79,12 @@ int CompileFile(char* in,int nameLength){
     strcpy(out, in);
     strcpy(in+nameLength,".c\0");
     strcpy(out+nameLength,".out\0");
-    int fd = open("gccLog.txt", O_WRONLY | O_CREAT);
+    int fd = open("gccLog.txt", O_CREAT | O_WRONLY , S_IWOTH | S_IROTH | S_IRGRP | S_IWGRP | S_IRUSR | S_IWUSR);
+    if (fd == -1){printf("error creating logs for gcc"); exit(-1);}
     pid_t ChildId = fork();
     if (ChildId == 0){
         dup2(fd, 1);
+        dup2(fd, 2);
         execlp("gcc","gcc",in,"-o",out, NULL);
     }
     else {wait(&status);close(fd);}
@@ -102,21 +101,25 @@ int CompileFile(char* in,int nameLength){
 int main(int argc, char** argv) {
     int fdin1, fdin2, fdin3;
     char cFile[MAX_NAME];
-    char outFile[MAX_NAME];
+    char printedName[MAX_NAME];
     char buffer;
     int nameLength = 0;
     int compilationStatus;
+    int grade;
     if (argc != 4){
         printf("Argument count is not correct. terminating...");
         return 0;
     }
     fdin1 = open(argv[1],O_RDWR);
     if (fdin1 == -1){return 0;}
-    while ((read(fdin1,&buffer,1)) != 0){
+    while ((read(fdin1,&buffer, sizeof(buffer))) != 0){
         if ((int) buffer == 10){
+            cFile[nameLength] = '\0';
+            printf("%s: ",cFile);
             compilationStatus = CompileFile(cFile,nameLength);
-            printf("%s\n",cFile);
-            writeGrades(fdin1, cFile, compilationStatus, argv[2], argv[3]);
+            grade = writeGrades(fdin1, cFile, compilationStatus, argv[2], argv[3]);
+            if (grade == -1){printf(" Compilation error\n");}
+            else {printf("%d\n", grade);}
             nameLength = -1;
         }
         cFile[nameLength] = buffer;
