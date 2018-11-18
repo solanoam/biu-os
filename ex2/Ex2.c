@@ -10,7 +10,7 @@ int CompFiles(char* const correctOut){
     int status;
     int fd;
     pid_t ChildId;
-    fd = OpenFile("comp.out");
+    fd = open("comp.out", O_RDONLY);
     if (fd == -1) {
         ChildId = fork();
         if (ChildId == 0){execlp("gcc", "gcc", "comp.c", "-o", "comp.out", NULL);}
@@ -18,7 +18,7 @@ int CompFiles(char* const correctOut){
     }
     else {close(fd);}
     ChildId = fork();
-    if (ChildId == 0){execl("comp.out", "temp.txt", correctOut, NULL);}
+    if (ChildId == 0){execl("comp.out", "tempOut.txt", correctOut, NULL);}
     else {wait(&status);}
     if (WEXITSTATUS(status) == 2){return 100;}
     else {return 0;}
@@ -26,33 +26,43 @@ int CompFiles(char* const correctOut){
 
 void GetOutput(char *file, char* input){
     int status;
+    int fdin = open(input, O_RDONLY);
+    if (fdin == -1) {printf("error with open arg[2]"); exit(-1);}
+    int fdout = open("tempOut.txt", O_CREAT | O_WRONLY | O_TRUNC);
+    if (fdout == -1){printf("error with tempOut.txt");exit(-1);}
     pid_t ChildId = fork();
-    if (ChildId == 0){execl(file,"<",input," >", "temp.txt", NULL);}
+    if (ChildId == 0){
+        dup2(fdin, 0);
+        dup2(fdout, 1);
+        execl(file, NULL);
+    }
     else {wait(&status);}
+    close(fdin);
+    close(fdout);
 }
 
-void WriteToFile(int* fdin, int grade){
+void WriteToFile(int fdin, int grade){
     char enterChar[1];
     enterChar[0] = (char) 10;
-    switch(grade){
-        case -1:
-            write(*(fdin),": Compilation error",19);
-            write(*(fdin),enterChar,1);
-            break;
-        case 0:
-            write(*(fdin),": 0",3);
-            write(*(fdin),enterChar,1);
-            break;
-        case 100:
-            write(*(fdin),": 100",5);
-            write(*(fdin),enterChar,1);
-            break;
-        default:
-            return;
-    }
+//    switch(grade){
+//        case -1:
+//            write(fdin,": Compilation error",19);
+//            write(fdin,enterChar,1);
+//            break;
+//        case 0:
+//            write(fdin,": 0",3);
+//            write(fdin,enterChar,1);
+//            break;
+//        case 100:
+//            write(fdin,": 100",5);
+//            write(fdin,enterChar,1);
+//            break;
+//        default:
+//            return;
+//    }
 }
 
-int writeGrades(int* fdin, char* file, int compilationStatus, char* input, char* correctOut){
+int writeGrades(int fdin, char* file, int compilationStatus, char* input, char* correctOut){
     int grade = -1;
     if (compilationStatus == 0){
         WriteToFile(fdin, grade);
@@ -66,21 +76,19 @@ int writeGrades(int* fdin, char* file, int compilationStatus, char* input, char*
     }
 }
 
-int OpenFile(char* fileName){
-    int fd = open(fileName,O_RDONLY);
-    if (fd < 0){return -1;}
-    else{return fd;}
-}
-
 int CompileFile(char* in,int nameLength){
     int status;
     char out[MAX_NAME];
     strcpy(out, in);
     strcpy(in+nameLength,".c\0");
     strcpy(out+nameLength,".out\0");
+    int fd = open("gccLog.txt", O_WRONLY | O_CREAT);
     pid_t ChildId = fork();
-    if (ChildId == 0){execlp("gcc","gcc",in,"-o",out, NULL);}
-    else {wait(&status);}
+    if (ChildId == 0){
+        dup2(fd, 1);
+        execlp("gcc","gcc",in,"-o",out, NULL);
+    }
+    else {wait(&status);close(fd);}
     int fdNewFile = open(out, O_RDONLY);
     if(fdNewFile == -1){
         return 0;
@@ -102,16 +110,16 @@ int main(int argc, char** argv) {
         printf("Argument count is not correct. terminating...");
         return 0;
     }
-    fdin1 = OpenFile(argv[1]);
+    fdin1 = open(argv[1],O_RDWR);
     if (fdin1 == -1){return 0;}
     while ((read(fdin1,&buffer,1)) != 0){
-        cFile[nameLength] = buffer;
-        //found space
         if ((int) buffer == 10){
             compilationStatus = CompileFile(cFile,nameLength);
-            writeGrades(&fdin1, cFile, compilationStatus, argv[2], argv[3]);
+            printf("%s\n",cFile);
+            writeGrades(fdin1, cFile, compilationStatus, argv[2], argv[3]);
             nameLength = -1;
         }
+        cFile[nameLength] = buffer;
         nameLength++;
     }
 }
