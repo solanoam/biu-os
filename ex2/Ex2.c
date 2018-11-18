@@ -6,15 +6,29 @@
 #include <string.h>
 #define MAX_NAME 32
 
-int CompFiles(int input){
-    if ((OpenFile("comp.out")) == -1) {
-        execlp("gcc", "gcc", "comp.c", "-o", "comp.out");
+int CompFiles(char* const correctOut){
+    int status;
+    int fd;
+    pid_t ChildId;
+    fd = OpenFile("comp.out");
+    if (fd == -1) {
+        ChildId = fork();
+        if (ChildId == 0){execlp("gcc", "gcc", "comp.c", "-o", "comp.out", NULL);}
+        else {wait(&status);}
     }
-
+    else {close(fd);}
+    ChildId = fork();
+    if (ChildId == 0){execl("comp.out", "temp.txt", correctOut, NULL);}
+    else {wait(&status);}
+    if (WEXITSTATUS(status) == 2){return 100;}
+    else {return 0;}
 }
 
 void GetOutput(char *file, char* input){
-    execlp("%s","%s","<","%s"," >", "temp.out", file, file, input);
+    int status;
+    pid_t ChildId = fork();
+    if (ChildId == 0){execl(file,"<",input," >", "temp.txt", NULL);}
+    else {wait(&status);}
 }
 
 void WriteToFile(int* fdin, int grade){
@@ -29,7 +43,7 @@ void WriteToFile(int* fdin, int grade){
             write(*(fdin),": 0",3);
             write(*(fdin),enterChar,1);
             break;
-        case 1:
+        case 100:
             write(*(fdin),": 100",5);
             write(*(fdin),enterChar,1);
             break;
@@ -46,7 +60,7 @@ int writeGrades(int* fdin, char* file, int compilationStatus, char* input, char*
     }
     else{
         GetOutput(file, input);
-        grade =
+        grade = CompFiles(correctOut);
         WriteToFile(fdin, grade);
         return 1;
     }
@@ -59,16 +73,15 @@ int OpenFile(char* fileName){
 }
 
 int CompileFile(char* in,int nameLength){
+    int status;
     char out[MAX_NAME];
     strcpy(out, in);
     strcpy(in+nameLength,".c\0");
     strcpy(out+nameLength,".out\0");
-//    printf("%s",in);
-//    printf("\n");
-//    printf("%s",out);
-//    printf("\n");
-    execlp("gcc","gcc","%s","-o","%s",in,out);
-    int fdNewFile = open(out, O_RDONLY) == -1;
+    pid_t ChildId = fork();
+    if (ChildId == 0){execlp("gcc","gcc",in,"-o",out, NULL);}
+    else {wait(&status);}
+    int fdNewFile = open(out, O_RDONLY);
     if(fdNewFile == -1){
         return 0;
     }
@@ -91,10 +104,6 @@ int main(int argc, char** argv) {
     }
     fdin1 = OpenFile(argv[1]);
     if (fdin1 == -1){return 0;}
-//    fdin2 = OpenFile(argv[2]);
-//    if (fdin2 == -1){close(fdin1); return 0;}
-//    fdin3 = OpenFile(argv[3]);
-//    if (fdin3 == -1){close(fdin1); close(fdin2); return 0;}
     while ((read(fdin1,&buffer,1)) != 0){
         cFile[nameLength] = buffer;
         //found space

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include<stdlib.h>
+#include <stdlib.h>
 
 /* When a SIGUSR1 signal arrives, set this variable. */
 int usr_interrupt = 0;
@@ -45,5 +45,3 @@ int main (void)
 
 	return 0;
 }
-
-
