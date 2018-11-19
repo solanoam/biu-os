@@ -92,7 +92,6 @@ int CompileFile(char* in,int nameLength){
 int main(int argc, char** argv) {
     int fdUsers;
     char cFile[MAX_NAME];
-    char printedName[MAX_NAME];
     char buffer;
     int nameLength = 0;
     if (argc != 4){ //terminating if the argc is incorrect
