@@ -104,53 +104,87 @@ void rrSim(struct Proccess inputProc[], int numOfProcs, int frame){
         }
     }
 }*/
+void printSim(int queue[], int time, int len){
+    printf("time of print is : %d\n", time);
+    for (int i = 0; i < len; i++){
+        printf("%d ", queue[i]+1);
+    }
+    printf("\n");
+}
+
+void decQueue(int queue[], int queueLen){
+    for (int i=1; i < queueLen; i++){
+        queue[i-1] = queue[i];
+    }
+}
+
 void rrSim(struct Proccess inputProc[], int numOfProcs, int frame){
     int queue[MAX_PROC_ALLOWED];
+    for (int p = 0; p < MAX_PROC_ALLOWED; p++){
+        queue[p] = 545655;
+    }
     int currentProc = 0;
     int timePassed = 0;
     int procsLeft = numOfProcs;
-    int oldProc = 0;
+    struct Proccess oldProc = inputProc[0];
+    int queueLen = 0;
+    int timeFrameLeft = 0;
     while (procsLeft != 0) {
+        timeFrameLeft = 0;
         int i;
-        int queueLen = 0;
-        int timeFrameLeft = 0;
-        for (i = currentProc+1; i < numOfProcs; i = i % numOfProcs) {
-            i = i % numOfProcs;
-            if (!(inputProc[i].finished) && inputProc[i].timeOfArrivel <= timePassed) {
-                queue[queueLen] = i;
-                queueLen++;
+        int z;
+        int count = 0;
+        for (i = currentProc; count < numOfProcs; count++) {
+            if (!(inputProc[i].finished) && inputProc[i].timeOfArrivel <= timePassed && currentProc != i) {
+                for (z = 0; z < queueLen; z++) {
+                    if (i == queue[z]) {
+                        break;
+                    }
+                }
+                if (z == queueLen){
+                    queue[queueLen] = i;
+                    queueLen++;
+                }
             }
             i++;
+            i = i % numOfProcs;
         }
-        int j;
-        for (j = 0; j < queueLen; j++){
-            currentProc = queue[j];
-            if (oldProc != currentProc && !(inputProc[currentProc].finished) && (queueLen)){
-                printf("#%d:[%d]-[%d]\n", inputProc[oldProc].pid, inputProc[oldProc].lastStartTime , timePassed);
+        if (!(inputProc[currentProc].finished) && inputProc[currentProc].timeOfArrivel <= timePassed){
+            queue[queueLen] = i;
+            queueLen++;
+        }
+        //printSim(queue, timePassed, queueLen);
+        currentProc = queue[0];
+        if (queueLen) {
+            if (oldProc.pid != inputProc[currentProc].pid && !(inputProc[currentProc].finished) && (queueLen)) {
+                if ((timePassed != 0)) {
+                    printf("#%d:[%d]-[%d]\n", oldProc.pid, oldProc.lastStartTime, timePassed);
+                }
                 inputProc[currentProc].lastStartTime = timePassed;
+                oldProc = inputProc[currentProc];
             }
             if (!(inputProc[currentProc].finished)) {
                 inputProc[currentProc].timeLeft -= frame;
-                if (inputProc[currentProc].timeLeft <= 0){
+                if (inputProc[currentProc].timeLeft <= 0) {
                     inputProc[currentProc].finished = 1;
                     procsLeft--;
                     timeFrameLeft = inputProc[currentProc].timeLeft;
-                    printf("#%d:[%d]-[%d]\n", inputProc[oldProc].pid, inputProc[oldProc].lastStartTime , timePassed + frame + timeFrameLeft);
-                    inputProc[currentProc].waitTime = timePassed + frame + timeFrameLeft - inputProc[currentProc].timeOfArrivel - inputProc[currentProc].timeBurst;
+                    inputProc[currentProc].waitTime =
+                            timePassed + frame + timeFrameLeft - inputProc[currentProc].timeOfArrivel -
+                            inputProc[currentProc].timeBurst;
                 }
             }
-            oldProc = currentProc;
-        }
-        if (queueLen) {
             timePassed += frame + timeFrameLeft;
+            decQueue(queue, queueLen);
+            queueLen--;
+
         }
         else {
             timePassed++;
         }
-        for (j = 0; j < queueLen; j++) {
-            queue[j] = 0;
-        }
     }
+
+    printf("#%d:[%d]-[%d]\n", oldProc.pid, oldProc.lastStartTime, timePassed);
 }
 
 void sjfSim(struct Proccess inputProc[], int numOfProcs){
