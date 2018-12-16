@@ -52,65 +52,6 @@ void fcfsSim(struct Proccess inputProc[], int numOfProcs){
         min = MAX_TIME_ARRIVE;
     }
 }
-/*
-void rrSim(struct Proccess inputProc[], int numOfProcs, int frame){
-    int currentProc = 0;
-    int oldProc = 0;
-    int lastProc = 0;
-    int timePassed = 0;
-    int procsLeft = numOfProcs;
-    int currentJob = 0;
-    while (procsLeft) {
-        int i;
-        int count = 0;
-        int chosen = 0;
-        for (i = currentProc + 1; count < numOfProcs; i = i % numOfProcs) {
-            if (i == numOfProcs) { i = 0; }
-            if (!inputProc[i].finished && !(currentJob % frame) && !(chosen)) {
-                if (inputProc[i].timeOfArrivel <= timePassed + currentJob) {
-                    oldProc = currentProc;
-                    currentProc = i;
-                    chosen = 1;
-                }
-            }
-            if (i == numOfProcs - 1 && !(currentJob % frame) && (oldProc != currentProc)) {
-                if (currentJob != 0) {
-                    printf("#%d:[%d]-[%d]\n", inputProc[oldProc].pid, timePassed, timePassed + currentJob);
-                    timePassed += currentJob;
-                    currentJob = 0;
-                }
-            }
-            i++;
-            count++;
-        }
-        if (!(currentJob % frame) && chosen) {
-            inputProc[currentProc].timeLeft--;
-            currentJob++;
-        }
-        else {
-            timePassed++;
-        }
-        if (!inputProc[currentProc].timeLeft) {
-            printf("#%d:[%d]-[%d]\n", inputProc[currentProc].pid, timePassed, timePassed + currentJob);
-            timePassed += currentJob;
-            currentJob = 0;
-            procsLeft--;
-            inputProc[currentProc].finished = 1;
-            inputProc[currentProc].waitTime = timePassed - inputProc[currentProc].timeOfArrivel - inputProc[currentProc].timeBurst;
-            int i;
-            for (i = 0; i < numOfProcs; i++){
-                if (!(inputProc[i].finished)) {currentProc = i;}
-            }
-        }
-    }
-}*/
-void printSim(int queue[], int time, int len){
-    printf("time of print is : %d\n", time);
-    for (int i = 0; i < len; i++){
-        printf("%d ", queue[i]+1);
-    }
-    printf("\n");
-}
 
 void decQueue(int queue[], int queueLen){
     for (int i=1; i < queueLen; i++){
@@ -153,7 +94,6 @@ void rrSim(struct Proccess inputProc[], int numOfProcs, int frame){
             queue[queueLen] = i;
             queueLen++;
         }
-        //printSim(queue, timePassed, queueLen);
         currentProc = queue[0];
         if (queueLen) {
             if (oldProc.pid != inputProc[currentProc].pid && !(inputProc[currentProc].finished) && (queueLen)) {
