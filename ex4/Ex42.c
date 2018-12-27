@@ -11,13 +11,13 @@
 #define HORI 0
 #define VERT 1
 
+//globals
 int posX = 9;
 int posY = 0;
 int blockState = HORI;
-int pipe_fd;
-
 
 void fallingBlock(int sig);
+
 
 int validatorX(int currPosX, int currBlockState){
     if (currPosX == 18 && currBlockState == HORI){return posX;}
@@ -36,11 +36,12 @@ int validatorFlip(int currPosX, int currPosY, int currentBlockState){
     if (currPosY == 19 && currentBlockState == HORI){return blockState;}
     if (currPosX == 19 && currentBlockState == VERT){return blockState;}
     if (currPosX == 1 && currentBlockState == VERT){return blockState;}
+    return currentBlockState;
 }
 
-int newPosHandler(int currPosX, int currPosY, int currBlockState){
+void newPosHandler(int currPosX, int currPosY, int currBlockState){
     posX = validatorX(currPosX, currBlockState);
-    posX = validatorY(currPosY, currBlockState);
+    posY = validatorY(currPosY, currBlockState);
     blockState = validatorFlip(currPosX, currPosY, currBlockState);
 }
 
@@ -111,9 +112,8 @@ void resetAlarm(){
 }
 
 void keyHandler(int sig){
-    char key;
     //TODO handling read error
-    getchar()
+    char key = (char) getchar();
     switch (key){
         case 'a':
             newPosHandler(posX - 1, posY, blockState);
@@ -135,17 +135,16 @@ void keyHandler(int sig){
 }
 
 void fallingBlock(int sig){
-    posY = newPosHandler(posX, posY + 1, blockState);
-    printBoard(posX, posY, blockState);
+    newPosHandler(posX, posY + 1, blockState);
     resetAlarm();
 }
 
-int main(int argc, char** argv){
-    if (argc == 2){pipe_fd = argv[1];}
+int main(){
     printBoard(posX, posY, blockState);
     signal(SIGUSR2,keyHandler);
     resetAlarm();
     while(true) {
+        printBoard(posX, posY, blockState);
         pause();
     }
 }
