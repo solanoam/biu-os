@@ -1,6 +1,9 @@
-//
-// Created by Noam Solan on 26/12/2018.
-//
+/**************************************
+ * Author: Noam Solan
+ * ID: 204484703
+ * Course: 83-381-01 (Operating Systems)
+ * Practice: 83-381-02 (Yoram)
+ **************************************/
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
