@@ -55,11 +55,6 @@ int runGame(int pipe[]){
         close(pipe[READ]);
         execl("draw.out", "draw.out", NULL);
     }
-    else {
-        close(pipe[READ]);
-        dup2(pipe[WRITE],1);
-        close(pipe[WRITE]);
-    }
     handleForkError(pipe, childId);
     return childId;
 }
@@ -72,8 +67,8 @@ void handleKeys(int pid, int* pipe){
     char keyPressed;
     while (true) {
         keyPressed = getch();
+        write(pipe[WRITE], &keyPressed, 1);
         if (keyPressed == EXIT_BUTTON) {exitGracfully(pipe, pid, 0); exit(-1);}
-        writeKey(keyPressed);
         kill(pid, SIGUSR2);
     }
 }

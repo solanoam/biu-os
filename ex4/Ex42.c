@@ -20,8 +20,8 @@ void fallingBlock(int sig);
 
 
 int validatorX(int currPosX, int currBlockState){
-    if (currPosX == 18 && currBlockState == HORI){return posX;}
-    if (currPosX == 2 && currBlockState == HORI){return posX;}
+    if (currPosX == 17 && currBlockState == HORI){return posX;}
+    if (currPosX == 1 && currBlockState == HORI){return posX;}
     if (currPosX == 19 && currBlockState == VERT){return posX;}
     if (currPosX == 1 && currBlockState == VERT){return posX;}
     return currPosX;
@@ -113,7 +113,8 @@ void resetAlarm(){
 
 void keyHandler(int sig){
     //TODO handling read error
-    char key = (char) getchar();
+    char key;
+    read(0,&key,sizeof(char));
     switch (key){
         case 'a':
             newPosHandler(posX - 1, posY, blockState);
