@@ -23,9 +23,9 @@
 #define SWAP_BUTTON 'w'
 
 //globals
-int posX = 9;
-int posY = 0;
-int blockState = HORI;
+int posX = POS_X_DEF;
+int posY = POS_Y_DEF;
+int blockState = BLOCK_STATE_DEF;
 
 void fallingBlock(int sig);
 
