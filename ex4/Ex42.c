@@ -1,9 +1,10 @@
-/**************************************
+/***************************************************************
  * Author: Noam Solan
  * ID: 204484703
  * Course: 83-381-01 (Operating Systems)
  * Practice: 83-381-02 (Yoram)
- **************************************/
+ * ENV: Ubuntu 16.04 LTS & macOS Mojave - x86_64-apple-darwin18
+ ***************************************************************/
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
@@ -13,6 +14,9 @@
 #include <stdbool.h>
 #define HORI 0
 #define VERT 1
+#define POS_X_DEF 9
+#define POS_Y_DEF 0
+#define BLOCK_STATE_DEF HORI
 #define RIGHT_BUTTON 'd'
 #define LEFT_BUTTON 'a'
 #define DOWN_BUTTON 's'
@@ -23,7 +27,6 @@ int posX = 9;
 int posY = 0;
 int blockState = HORI;
 
-//
 void fallingBlock(int sig);
 
 // validation for new x position
@@ -52,6 +55,11 @@ void newPosHandler(int currPosX, int currPosY, int currBlockState){
     posX = validatorX(currPosX, currBlockState);
     posY = validatorY(currPosY, currBlockState);
     blockState = validatorFlip(currPosX, currPosY, currBlockState);
+    if (currPosY != 0 && posY == 0){
+        posX = POS_X_DEF;
+        posY = POS_Y_DEF;
+        blockState = BLOCK_STATE_DEF;
+    }
 }
 //print the floor for the board
 void printFloor(){
