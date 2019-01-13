@@ -1,9 +1,10 @@
-/**************************************
+/***************************************************************
  * Author: Noam Solan
  * ID: 204484703
  * Course: 83-381-01 (Operating Systems)
  * Practice: 83-381-02 (Yoram)
- **************************************/
+ * ENV: Ubuntu 16.04 LTS & macOS Mojave - x86_64-apple-darwin18
+ ***************************************************************/
 #include <stdio.h>
 #include <unistd.h>
 #include <termios.h>
